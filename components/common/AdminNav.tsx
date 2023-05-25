@@ -70,7 +70,7 @@ const AdminNav: FC<Props> = ({ navItems }): JSX.Element => {
         </Link>
 
         {/* Nav Items */}
-        <div className="space-y-6">
+        <div className="space-y-5">
           {navItems.map((item) => (
             <Link
               key={item.href}
