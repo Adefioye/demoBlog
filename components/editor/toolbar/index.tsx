@@ -15,9 +15,10 @@ import {
   BsTypeItalic,
   BsTypeUnderline,
   BsImageFill,
-  BsLink45Deg,
   BsYoutube,
 } from "react-icons/bs";
+import InsertLink from "../link/InsertLink";
+import { linkOption } from "../link/LinkForm";
 
 interface Props {
   editor: Editor | null;
@@ -60,6 +61,13 @@ const Toolbar: FC<Props> = ({ editor }): JSX.Element | null => {
         <AiFillCaretDown />
       </div>
     );
+  };
+
+  const handleLinkSubmission = ({ url, openInNewTab }: linkOption) => {
+    const { commands } = editor;
+
+    if (openInNewTab) commands.setLink({ href: url, target: "_blank" });
+    else commands.setLink({ href: url });
   };
 
   return (
@@ -122,9 +130,8 @@ const Toolbar: FC<Props> = ({ editor }): JSX.Element | null => {
           <BsBraces />
         </Button>
 
-        <Button>
-          <BsLink45Deg />
-        </Button>
+        {/* Insert Link */}
+        <InsertLink onSubmit={handleLinkSubmission} />
 
         <Button
           active={editor.isActive("orderedList")}

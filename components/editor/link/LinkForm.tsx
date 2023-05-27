@@ -1,0 +1,76 @@
+import { FC, useState, useEffect } from "react";
+import { validateUrl } from "../EditorUtils";
+
+interface Props {
+  onSubmit(link: linkOption): void;
+  visible: boolean;
+  initialState?: linkOption;
+}
+
+export type linkOption = {
+  url: string;
+  openInNewTab: boolean;
+};
+
+const defaultLink = {
+  url: "",
+  openInNewTab: false,
+};
+
+const LinkForm: FC<Props> = ({
+  visible,
+  onSubmit,
+  initialState,
+}): JSX.Element | null => {
+  const [link, setLink] = useState<linkOption>(defaultLink);
+
+  const handleSubmit = () => {
+    onSubmit({ ...link, url: validateUrl(link.url) });
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setLink({ ...defaultLink });
+  };
+
+  useEffect(() => {
+    if (initialState) setLink({ ...initialState });
+  }, [initialState]);
+
+  if (!visible) return null;
+
+  return (
+    <div className="rounded p-2 bg-primary dark:bg-primary-dark shadow-sm shadow-secondary-dark">
+      <input
+        placeholder="http://example.com"
+        onChange={(event) => setLink({ ...link, url: event.target.value })}
+        value={link.url}
+        autoFocus
+        type="text"
+        className="bg-transparent rounded border-2 border-secondary-dark focus:border-primary-dark dark:focus:border-primary transition p-2 text-primary-dark dark:text-primary"
+      />
+
+      <div className="flex items-center space-x-2 mt-2">
+        <input
+          type="checkbox"
+          id="open-in-new-tab"
+          onChange={(event) =>
+            setLink({ ...link, openInNewTab: event.target.checked })
+          }
+        />
+        <label htmlFor="open-in-new-tab">open new tab</label>
+
+        <div className="flex-1 text-right">
+          <button
+            onClick={handleSubmit}
+            className="bg-action px-2 py-1 text-primary rounded text-sm"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LinkForm;
