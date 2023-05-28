@@ -3,7 +3,7 @@ import DropdownOptions from "../DropdownOptions";
 import { getFocusedEditor } from "./../EditorUtils";
 import { Editor } from "@tiptap/react";
 import { AiFillCaretDown } from "react-icons/ai";
-import Button from "./Botton";
+import Button from "./Button";
 import { RiDoubleQuotesL } from "react-icons/ri";
 import {
   BsTypeStrikethrough,
@@ -19,6 +19,7 @@ import {
 } from "react-icons/bs";
 import InsertLink from "../link/InsertLink";
 import { linkOption } from "../link/LinkForm";
+import EmbedYoutube from "./EmbedYoutube";
 
 interface Props {
   editor: Editor | null;
@@ -68,6 +69,10 @@ const Toolbar: FC<Props> = ({ editor }): JSX.Element | null => {
 
     if (openInNewTab) commands.setLink({ href: url, target: "_blank" });
     else commands.setLink({ href: url });
+  };
+
+  const handleEmbedYoutube = (url: string) => {
+    editor.chain().focus().setYoutubeVideo({ src: url }).run();
   };
 
   return (
@@ -151,9 +156,7 @@ const Toolbar: FC<Props> = ({ editor }): JSX.Element | null => {
       <div className="h-4 w-[1px] bg-secondary-dark dark:bg-secondary-light mx-8" />
 
       <div className="flex items-center space-x-2">
-        <Button>
-          <BsYoutube />
-        </Button>
+        <EmbedYoutube onSubmit={handleEmbedYoutube} />
 
         <Button>
           <BsImageFill />
